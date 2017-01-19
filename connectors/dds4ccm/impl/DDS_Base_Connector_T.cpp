@@ -96,14 +96,14 @@ DDS_Base_Connector_T<CCM_TYPE>::create_dds_participant_factory (void)
         {
 #if (CIAO_DDS4CCM_OPENDDS==1)
           this->participant_factory_ = TheParticipantFactory;
-          TheServiceParticipant->set_default_discovery (OpenDDS::DCPS::Discovery::DEFAULT_RTPS);
 
           OpenDDS::RTPS::RtpsDiscovery_rch disc =
             OpenDDS::DCPS::make_rch<OpenDDS::RTPS::RtpsDiscovery>(
-              OpenDDS::DCPS::Discovery::RepoKey(OpenDDS::DCPS::Discovery::DEFAULT_RTPS)
+              OpenDDS::DCPS::Discovery::DEFAULT_RTPS
             );
 
-          TheServiceParticipant->add_discovery(OpenDDS::DCPS::static_rchandle_cast<OpenDDS::DCPS::Discovery>(disc));
+          TheServiceParticipant->set_default_discovery (disc->key());
+          TheServiceParticipant->add_discovery(disc);
           TheServiceParticipant->set_repo_domain(this->domain_id (), disc->key());
 #else
           this->participant_factory_ =
